@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+
+<div class="container col-xxl-8 px-4 py-5">
+
+ <h5 align='center'>Прогноз роста цены криптовалют через 24 часа!</h5><br><br>
+
+<table class="table table-primary table-striped">
+
+  <thead>
+    <tr>
+      <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
+      <th scope="col">Roma</th>
+      <th scope="col">Dasha</th>
+      <th scope="col">Alisa</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_ton.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp TON</th>
+      <td class="{% if TON_roma <= 0.499 %}table-danger{% endif %}{% if TON_roma >= 0.5 %}table-success{% endif %}">{{ TON_roma }}</td>
+      <td class="{% if TON_dasha <= 0.499 %}table-danger{% endif %}{% if TON_dasha >= 0.5 %}table-success{% endif %}">{{ TON_dasha }}</td>
+      <td class="{% if TON_alisa  <= 0.499 %}table-danger{% endif %}{% if TON_alisa  >= 0.5 %}table-success{% endif %}">{{ TON_alisa }}</td>
+    </tr>
+	 <tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_btc.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp BTC</th>
+      <td class="{% if BTC_roma <= 0.499 %}table-danger{% endif %}{% if BTC_roma >= 0.5 %}table-success{% endif %}">{{ BTC_roma }}</td>
+      <td class="{% if BTC_dasha <= 0.499 %}table-danger{% endif %}{% if BTC_dasha >= 0.5 %}table-success{% endif %}">{{ BTC_dasha }}</td>
+      <td class="{% if BTC_alisa  <= 0.499 %}table-danger{% endif %}{% if BTC_alisa  >= 0.5 %}table-success{% endif %}">{{ BTC_alisa }}</td>
+    </tr>
+    <tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_eth.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp ETH</th>
+      <td class="{% if ETH_roma <= 0.499 %}table-danger{% endif %}{% if ETH_roma >= 0.5 %}table-success{% endif %}">{{ ETH_roma }}</td>
+      <td class="{% if ETH_dasha <= 0.499 %}table-danger{% endif %}{% if ETH_dasha >= 0.5 %}table-success{% endif %}">{{ ETH_dasha }}</td>
+      <td class="{% if ETH_alisa  <= 0.499 %}table-danger{% endif %}{% if ETH_alisa  >= 0.5 %}table-success{% endif %}">{{ ETH_alisa }}</td>
+    </tr>
+
+
+	<tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_bnb.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp BNB</th>
+      <td class="{% if BNB_roma <= 0.499 %}table-danger{% endif %}{% if BNB_roma >= 0.5 %}table-success{% endif %}">{{ BNB_roma }}</td>
+      <td class="{% if BNB_dasha <= 0.499 %}table-danger{% endif %}{% if BNB_dasha >= 0.5 %}table-success{% endif %}">{{ BNB_dasha }}</td>
+      <td class="{% if BNB_alisa  <= 0.499 %}table-danger{% endif %}{% if BNB_alisa  >= 0.5 %}table-success{% endif %}">{{ BNB_alisa }}</td>
+    </tr>
+	
+		<tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_doge.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp DOGE</th>
+      <td class="{% if DOGE_roma <= 0.499 %}table-danger{% endif %}{% if DOGE_roma >= 0.5 %}table-success{% endif %}">{{ DOGE_roma }}</td>
+      <td class="{% if DOGE_dasha <= 0.499 %}table-danger{% endif %}{% if DOGE_dasha >= 0.5 %}table-success{% endif %}">{{ DOGE_dasha }}</td>
+      <td class="{% if DOGE_alisa  <= 0.499 %}table-danger{% endif %}{% if DOGE_alisa  >= 0.5 %}table-success{% endif %}">{{ DOGE_alisa }}</td>
+    </tr>
+	
+		<tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_ada.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp ADA</th>
+      <td class="{% if ADA_roma <= 0.499 %}table-danger{% endif %}{% if ADA_roma >= 0.5 %}table-success{% endif %}">{{ ADA_roma }}</td>
+      <td class="{% if ADA_dasha <= 0.499 %}table-danger{% endif %}{% if ADA_dasha >= 0.5 %}table-success{% endif %}">{{ ADA_dasha }}</td>
+      <td class="{% if ADA_alisa  <= 0.499 %}table-danger{% endif %}{% if ADA_alisa  >= 0.5 %}table-success{% endif %}">{{ ADA_alisa }}</td>
+    </tr>
+	
+		<tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_TRX.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp TRX</th>
+      <td class="{% if TRX_roma <= 0.499 %}table-danger{% endif %}{% if TRX_roma >= 0.5 %}table-success{% endif %}">{{ TRX_roma }}</td>
+      <td class="{% if TRX_dasha <= 0.499 %}table-danger{% endif %}{% if TRX_dasha >= 0.5 %}table-success{% endif %}">{{ TRX_dasha }}</td>
+      <td class="{% if TRX_alisa  <= 0.499 %}table-danger{% endif %}{% if TRX_alisa  >= 0.5 %}table-success{% endif %}">{{ TRX_alisa }}</td>
+    </tr>
+	
+		<tr>
+      <th scope="row"> <a href="/"><img class="" src="{% static "img/icon_XRP.svg"%}" alt="" width="32" height="32"></a>&nbsp&nbsp XRP</th>
+      <td class="{% if XRP_roma <= 0.499 %}table-danger{% endif %}{% if XRP_roma >= 0.5 %}table-success{% endif %}">{{ XRP_roma }}</td>
+      <td class="{% if XRP_dasha <= 0.499 %}table-danger{% endif %}{% if XRP_dasha >= 0.5 %}table-success{% endif %}">{{ XRP_dasha }}</td>
+      <td class="{% if XRP_alisa  <= 0.499 %}table-danger{% endif %}{% if XRP_alisa  >= 0.5 %}table-success{% endif %}">{{ XRP_alisa }}</td>
+    </tr>
+	
+	
+  </tbody>
+
+</table>
+  </div>
+  
+
+
+<div class="container py-5">
+
+
+
+
+	 
+	 <br>
+	
+	<br>
+	
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
