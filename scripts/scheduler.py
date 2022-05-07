@@ -6,21 +6,11 @@ import pandas as pd #для работы с таблицами
 import numpy as np
 import requests
 
-
-
-import math #математические функции
-import csv  #для чтения csv-файлов
-import tensorflow as tf
-from tensorflow.keras import Input, Model, Sequential, regularizers, optimizers, models
-from tensorflow.keras.layers import concatenate,TimeDistributed, Concatenate, GRU, Activation, Dropout, Flatten,SeparableConv1D, Dense, SimpleRNN, LSTM, Conv1D, Reshape,MaxPooling1D, Conv2D, Reshape,MaxPooling2D, Permute,Bidirectional, BatchNormalization, DepthwiseConv2D, GlobalMaxPooling2D
-from tensorflow.keras.utils import plot_model #отрисовка структуры модели
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping,Callback
+import math
+import numpy as np
+import pandas as pd
+from tensorflow.keras import Input, Model
 from tensorflow.keras.models import model_from_json #загрузка модели из файлов json и h5
-
-import tensorflow.keras.backend as K #для кастомизации функции потерь
-
-import json
-
 
 
 
@@ -168,81 +158,7 @@ def get_from_binance_in_csv(pair, period):
 #period: 24,            \\это значение для добавления целевого столбца Target (на сколько свечей брать прогноз)
 #tick_interval: 10s, 1m, 5m, 15m, 30m, 1h, 4h, 8h, 1d, 7d, 30d  \\from gate.io
 
-def get_from_gateio(market, tick_interval, tick_limit, nn_name, period_predict, period):
-    url = 'https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair='+market+'&interval='+tick_interval+'&limit='+tick_limit
-    data_gateio = requests.get(url).json()
-    df = pd.DataFrame(data_gateio)
-    df.columns = ['Open time','Quote asset volume','Close','High','Low','Open','Volume']
-    df = df.astype(float)
-    df = add_target(df,period)
-    df = add_indicators(df)
-    df = df.dropna(axis='index', how='any')
-
-    price = df.iloc[-1][2] #значение Close в последней строке  
-
-    what_time = np.asarray(df.iloc[:,0])#только столбец Open time, берем пока не дропнули
-
-    df.drop(['Open time'], axis=1, inplace=True)
-#отдельяем столбец с целевым значением от остальной таблицы с данными
-    X_class = np.asarray(df.iloc[:,~df.columns.isin(['Target'])]) #все кроме столбца Target
-#Y_class = np.asarray(df.iloc[:,0]).reshape(-1, 1)   #если reshape то будут проблемы с отрисовкой графиков распределения значений в наборах
-    Y_class = np.asarray(df.iloc[:,6])#только столбец Target
-
-    mean_X = X_class.mean(axis=0)
-    std_X = X_class.std(axis=0)
-
-    X_class_std = X_class - mean_X
-    X_class_std = X_class_std / std_X
-    X_class = X_class_std
-
-    folder = ''
-
-    model_json=folder+nn_name+".json"
-    model_h5=folder+nn_name+".h5"
-
-
-#загрузка структуры
-    json_file = open(model_json, "r")
-    loaded_model_json = json_file.read()
-    json_file.close()
-
-    model2 = model_from_json(loaded_model_json)
-# загрузка весов
-    model2.load_weights(model_h5)
-    model = Model(model2.input, model2.layers[-1].output)
-    model.trainable = True
-
-    pred = model.predict(X_class) 
-    lastpredict = pred[-1] #pred - массив Numpy
-    '''
-    np2 = np.column_stack((what_time, pred, Y_class)) #соединяем массивы Numpy в один
-    df2 = pd.DataFrame(np2)
-    df2.columns = ['Время', 'Прогноз роста', 'Рост']
-
-    df2.loc[df2['Рост'] == 1, 'Рост'] = 'Да'
-    df2.loc[df2['Рост'] == 0, 'Рост'] = 'Нет'
-
-
-    for i in df2['Время']:
-        i = i / 1000
-        i = datetime.utcfromtimestamp(i).strftime('%Y-%m-%d %H:%M:%S')
-
-    #    df2.to_csv('gate_io_predict_'+tick_interval+'_'+tick_limit+'.csv', sep=',', encoding='utf-8', index=False)
-    '''  
-    newpredict = Predict_grow.objects.create()
-    newpredict.pair = market
-    newpredict.nn = nn_name
-    newpredict.period = period_predict
-    lastpredict = float(lastpredict)
-    lastpredict = round (lastpredict, 3) #округляем до трех знаков после запятой
-    newpredict.value = lastpredict
-    newpredict.price = price
-    newpredict.trueorfalse = None
-    newpredict.save()
-
  
-
-'''
 def get_from_gateio(market, tick_interval, tick_limit, nn_name, period_predict, period):
     while True:
         try:
@@ -310,7 +226,7 @@ def get_from_gateio(market, tick_interval, tick_limit, nn_name, period_predict, 
             time.sleep(60)#если ошибка выводим в консольвремя ошибки, ждем 60 секунд и с помощью continue заново входим в цикл while, если ошибки небыло - выходим из цикла while с помощью break
             continue
         break
-'''   
+ 
 
 
 def check_predict_true_or_false (period_predict):

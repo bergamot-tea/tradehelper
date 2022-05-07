@@ -16,8 +16,8 @@ services:
       - /bin/bash
       - -c
       - |
-        python manage.py runscript scheduler &
-        python manage.py runserver 0.0.0.0:8050
+        python manage.py runserver 0.0.0.0:8050 & 
+        python manage.py runscript scheduler
     volumes:
       - .:/code
     ports:
