@@ -2,13 +2,11 @@ import os, time
 from datetime import datetime, timedelta
 from helperapp.models import Klines, Predict_grow
 import schedule
-import pandas as pd #для работы с таблицами
+import pandas as pd
 import numpy as np
 import requests
 
 import math
-import numpy as np
-import pandas as pd
 from tensorflow.keras import Input, Model
 from tensorflow.keras.models import model_from_json #загрузка модели из файлов json и h5
 
