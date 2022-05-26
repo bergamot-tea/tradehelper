@@ -10,6 +10,22 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     restart: always
+  
+  flask:
+    build: ./flask
+    command:
+      - /bin/bash
+      - -c
+      - |
+        gunicorn --bind 0.0.0.0:5000  --timeout 120 --workers=2 --threads=2 --worker-connections=1000 flask_api:app
+        python flask_api.py
+
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    restart: always
+    
   web:
     build: .
     command:
@@ -25,3 +41,4 @@ services:
     depends_on:
       - db
     restart: always
+

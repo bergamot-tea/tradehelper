@@ -32,3 +32,11 @@ class Predict_grow(models.Model):
     value = models.FloatField(blank=True, null=True)        #вероятность роста, значение от 0 до 1
     price = models.FloatField(blank=True, null=True)        #цена на момент прогноза (текущая цена)
     trueorfalse = models.BooleanField(blank=True, null=True)#сбылось или нет
+    time_close = models.DateTimeField(blank=True, null=True)           #дата прогноза
+
+class Coins(models.Model):
+    name = models.CharField(max_length=50, blank=True)      #например Ethereum
+    tiker = models.CharField(max_length=50, blank=True)     #например ETH
+    pair = models.CharField(max_length=50, blank=True)      #например ETH_USDT
+    logo = models.CharField(max_length=50, blank=True)      #например icon_eth.svg
+    

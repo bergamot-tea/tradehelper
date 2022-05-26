@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . views import home_view
-from helperapp.views import predict_1h_view, predict_1d_view, predict_7d_view
+from helperapp.views import predict_1h_view, predict_1d_view, predict_7d_view, roma_view
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,5 +29,6 @@ urlpatterns = [
     path('predict/hour/', predict_1h_view, name='predict_1h_page'),
     path('predict/day/', predict_1d_view, name='predict_1d_page'),
     path('predict/week/', predict_7d_view, name='predict_7d_page'),
+    path('roma/', roma_view, name='roma_page'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

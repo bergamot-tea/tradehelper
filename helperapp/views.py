@@ -1,10 +1,35 @@
 from django.shortcuts import render
-from . models import Predict_grow
+from . models import Predict_grow, Coins
 
 
 
 # Create your views here.
 
+
+def roma_view(request):
+    
+    #тут пока общее количество считается по всем вомбатам
+    
+    true_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).count()
+    false_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).count()
+    percent_1h = true_count_1h / (true_count_1h + false_count_1h)
+    
+    true_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).count()
+    false_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).count()
+    percent_1d = true_count_1d / (true_count_1d + false_count_1d)
+
+    true_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).count()
+    false_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).count()
+    try:
+        percent_7d = true_count_7d / (true_count_7d + false_count_7d)
+    except:
+        percent_7d = 'Dontknow'
+
+
+    return render(request, 'roma.html', {
+    'percent_1h': percent_1h, 'percent_1d': percent_1d, 'percent_7d': percent_7d,
+
+    })
 
 
     

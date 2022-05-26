@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . views import helper_view, predict_1h_view
+from . views import helper_view
 
 from django.conf import settings
 from django.conf.urls.static import static
