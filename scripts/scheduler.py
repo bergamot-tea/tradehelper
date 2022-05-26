@@ -127,9 +127,9 @@ list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USD
 
 #1h прогноз
 for x in list_token_pair:
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '10m', '75', 'gateio_v1_roma', '1h', '12')
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '10m', '75', 'gateio_v1_dasha', '1h', '12')
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '10m', '75', 'gateio_v1_alisa', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_roma', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_dasha', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_alisa', '1h', '12')
 #1d прогноз
 for x in list_token_pair:
     schedule.every().hour.at(":05").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_roma', '1d', '24')
