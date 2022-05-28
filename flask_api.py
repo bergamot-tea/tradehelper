@@ -6,7 +6,7 @@ import numpy as np
 import math
 from tensorflow.keras import Input, Model
 from tensorflow.keras.models import model_from_json
-
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -91,58 +91,61 @@ def add_indicators(df):
 
 class MyClass(Resource):
     def get(self,market,tick_interval,tick_limit, period, nn_name):
-        url = 'https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair='+market+'&interval='+tick_interval+'&limit='+tick_limit
-        data_gateio = requests.get(url).json()
-        
-        df = pd.DataFrame(data_gateio)
-        df.columns = ['Open time','Quote asset volume','Close','High','Low','Open','Volume']
-        
-        df.loc[(df['Volume'] == '0'), 'Volume'] = 1 #если объем торгов в строке равен 0, то заменить 0 на 1000 иначе не получится рассчитать технические индикаторы и сделать предикт и могут быть NaN в предикт 
-      
-        time_close = df.iloc[-1][0] #значение Open time в последней строке, берем пока не отбросили NaN, оно равно значению Close time в предпоследней строке
-        
-        df = df.astype(float)
-        
-        df = add_target(df,period)
-        df = add_indicators(df)
-        df = df.dropna(axis='index', how='any')
-        price = df.iloc[-1][2] #значение Close в последней строке  
-        df.drop(['Open time'], axis=1, inplace=True)
-        #отдельяем столбец с целевым значением от остальной таблицы с данными
-        X_class = np.asarray(df.iloc[:,~df.columns.isin(['Target'])]) #все кроме столбца Target
-        #Y_class = np.asarray(df.iloc[:,0]).reshape(-1, 1)   #если reshape то будут проблемы с отрисовкой графиков распределения значений в наборах
-        Y_class = np.asarray(df.iloc[:,6])#только столбец Target
+        try:
+            url = 'https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair='+market+'&interval='+tick_interval+'&limit='+tick_limit
+            data_gateio = requests.get(url).json()
+            
+            df = pd.DataFrame(data_gateio)
+            df.columns = ['Open time','Quote asset volume','Close','High','Low','Open','Volume']
+            
+            df.loc[(df['Volume'] == '0'), 'Volume'] = 1 #если объем торгов в строке равен 0, то заменить 0 на 1000 иначе не получится рассчитать технические индикаторы и сделать предикт и могут быть NaN в предикт 
+          
+            time_close = df.iloc[-1][0] #значение Open time в последней строке, берем пока не отбросили NaN, оно равно значению Close time в предпоследней строке
+            
+            df = df.astype(float)
+            
+            df = add_target(df,period)
+            df = add_indicators(df)
+            df = df.dropna(axis='index', how='any')
+            price = df.iloc[-1][2] #значение Close в последней строке  
+            df.drop(['Open time'], axis=1, inplace=True)
+            #отдельяем столбец с целевым значением от остальной таблицы с данными
+            X_class = np.asarray(df.iloc[:,~df.columns.isin(['Target'])]) #все кроме столбца Target
+            #Y_class = np.asarray(df.iloc[:,0]).reshape(-1, 1)   #если reshape то будут проблемы с отрисовкой графиков распределения значений в наборах
+            Y_class = np.asarray(df.iloc[:,6])#только столбец Target
 
-        mean_X = X_class.mean(axis=0)
-        std_X = X_class.std(axis=0)
+            mean_X = X_class.mean(axis=0)
+            std_X = X_class.std(axis=0)
 
-        X_class_std = X_class - mean_X
-        X_class_std = X_class_std / std_X
-        X_class = X_class_std
+            X_class_std = X_class - mean_X
+            X_class_std = X_class_std / std_X
+            X_class = X_class_std
 
-        folder = ''
+            folder = ''
 
-        model_json=folder+nn_name+".json"
-        model_h5=folder+nn_name+".h5"
+            model_json=folder+nn_name+".json"
+            model_h5=folder+nn_name+".h5"
 
 
-        #загрузка структуры
-        json_file = open(model_json, "r")
-        loaded_model_json = json_file.read()
-        json_file.close()
+            #загрузка структуры
+            json_file = open(model_json, "r")
+            loaded_model_json = json_file.read()
+            json_file.close()
 
-        model2 = model_from_json(loaded_model_json)
-        # загрузка весов
-        model2.load_weights(model_h5)
-        model = Model(model2.input, model2.layers[-1].output)
-        model.trainable = True
+            model2 = model_from_json(loaded_model_json)
+            # загрузка весов
+            model2.load_weights(model_h5)
+            model = Model(model2.input, model2.layers[-1].output)
+            model.trainable = True
 
-        pred = model.predict(X_class) 
-        
-        lastpredict = pred[-1] #pred - массив Numpy
-        lastpredict = float(lastpredict)
-        lastpredict = round (lastpredict, 3) #округляем до трех знаков после запятой
-
+            pred = model.predict(X_class) 
+            
+            lastpredict = pred[-1] #pred - массив Numpy
+            lastpredict = float(lastpredict)
+            lastpredict = round(lastpredict, 3) #округляем до трех знаков после запятой
+        except:
+            now = datetime.now()
+            print('error in function get()', now)
 
         
         return time_close, price, lastpredict, 200

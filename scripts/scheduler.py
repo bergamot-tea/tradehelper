@@ -127,14 +127,14 @@ list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USD
 
 #1h прогноз
 for x in list_token_pair:
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_roma', '1h', '12')
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_dasha', '1h', '12')
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_alisa', '1h', '12')
+    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_roma', '1h', '12')
+    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_dasha', '1h', '12')
+    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_alisa', '1h', '12')
 #1d прогноз
 for x in list_token_pair:
-    schedule.every().hour.at(":05").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_roma', '1d', '24')
-    schedule.every().hour.at(":05").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_dasha', '1d', '24')
-    schedule.every().hour.at(":05").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_alisa', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_roma', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_dasha', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_alisa', '1d', '24')
 #7d прогноз
 for x in list_token_pair:
     schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_roma', '7d', '21')
@@ -142,7 +142,7 @@ for x in list_token_pair:
     schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_alisa', '7d', '21')
 
 
-schedule.every(10).minutes.at(":04").do(check_predict_true_or_false, '1h')
+schedule.every(10).minutes.at(":03").do(check_predict_true_or_false, '1h')
 schedule.every().hour.at(":09").do(check_predict_true_or_false, '1d')
 schedule.every().day.at("00:17").do(check_predict_true_or_false, '7d')
 
