@@ -3,8 +3,9 @@ from datetime import datetime, timedelta
 from helperapp.models import Predict_grow
 import schedule
 import requests
-#import random
 
+#def clear_predicts():
+#    Predict_grow.objects.all().delete() #функция для отладки
 
 #http://127.0.0.1:5000/TONCOIN_USDT_1h_75_24_gateio-v1-alisa
 
@@ -125,26 +126,32 @@ def check_predict_true_or_false (period_predict):
 
 list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USDT', 'ADA_USDT', 'TRX_USDT', 'XRP_USDT']
 
+
+#если tick_limit 75 а не 100 то будут NaN-ы
+
 #1h прогноз
 for x in list_token_pair:
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_roma', '1h', '12')
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_dasha', '1h', '12')
-    schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_alisa', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_roma', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_dasha', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_alisa', '1h', '12')
 #1d прогноз
 for x in list_token_pair:
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_roma', '1d', '24')
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_dasha', '1d', '24')
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '75', 'gateio_v1_alisa', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_roma', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_dasha', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_alisa', '1d', '24')
 #7d прогноз
 for x in list_token_pair:
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_roma', '7d', '21')
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_dasha', '7d', '21')
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_alisa', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_roma', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_dasha', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_alisa', '7d', '21')
 
 
 schedule.every(10).minutes.at(":03").do(check_predict_true_or_false, '1h')
 schedule.every().hour.at(":09").do(check_predict_true_or_false, '1d')
 schedule.every().day.at("00:17").do(check_predict_true_or_false, '7d')
+
+#schedule.every().day.at("21:28").do(clear_predicts)
+#функция для отладки
 
 
 '''
