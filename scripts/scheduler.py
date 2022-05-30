@@ -6,6 +6,9 @@ import requests
 #import random
 
 
+#def clear_predicts():
+#    Predict_grow.objects.all().delete() #функция для отладки
+
 #http://127.0.0.1:5000/TONCOIN_USDT_1h_75_24_gateio-v1-alisa
 
 #period_predict: 24h,   \\это просто значение для базы чтоб понимать на сколько прогноз
@@ -36,7 +39,7 @@ def get_from_flask_api(market, tick_interval, tick_limit, nn_name, period_predic
     newpredict.price = price
     newpredict.trueorfalse = None
     
-    unix_time_close = int(unix_time_close)
+    unix_time_close = int(unix_time_close) / 1000
     datetime_close = datetime.utcfromtimestamp(unix_time_close)#переводим юникс-время в формат YYYY-MM-DD HH:MM[:ss[.uuuuuu]]
     
     newpredict.time_close = datetime_close
@@ -122,9 +125,15 @@ def check_predict_true_or_false (period_predict):
 #schedule.every(60).seconds.do(get_from_binance_in_csv, 'ETHUSDT', '1m')
 #schedule.every().hour.do(get_from_binance_in_csv, 'ETHUSDT', '1h')
 
+list_token_pair = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'DOGEUSDT', 'ADAUSDT', 'TRXUSDT', 'XRPUSDT']
+#list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USDT', 'ADA_USDT', 'TRX_USDT', 'XRP_USDT']
 
-list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USDT', 'ADA_USDT', 'TRX_USDT', 'XRP_USDT']
+#если tick_limit 75 а не 100 то будут NaN-ы
 
+for x in list_token_pair:
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'my_model_1m', '1h', '12')
+
+'''
 #1h прогноз
 for x in list_token_pair:
     schedule.every(5).minutes.at(":01").do(get_from_flask_api, x, '5m', '75', 'gateio_v1_roma', '1h', '12')
@@ -140,12 +149,14 @@ for x in list_token_pair:
     schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_roma', '7d', '21')
     schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_dasha', '7d', '21')
     schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '75', 'gateio_v1_alisa', '7d', '21')
-
+'''
 
 schedule.every(10).minutes.at(":03").do(check_predict_true_or_false, '1h')
 schedule.every().hour.at(":09").do(check_predict_true_or_false, '1d')
 schedule.every().day.at("00:17").do(check_predict_true_or_false, '7d')
 
+#schedule.every().day.at("21:28").do(clear_predicts)
+#функция для отладки
 
 '''
 schedule.every().day.at("08:05").do(base_downloader)
