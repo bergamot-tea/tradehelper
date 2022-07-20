@@ -9,17 +9,37 @@
 
 <div class="container col-xxl-8 px-4 py-5">
 
- <h5 align='center'>Прогноз роста цены криптовалют через 7 дней!</h5><br><br>
+ <h5 align='center'>RRR</h5><br><br>
 
-<table class="table table-secondary table-striped">
+  
+{{ spirit }} <br>
+1H true: {{ percent_1h }} <br>
+1D true: {{ percent_1d }} <br>
+7D true: {{ percent_7d }} <br>
+Правельных 1H: {{ true_count_1h }}<br>
+Не Правельных 1H: {{ false_count_1h }}<br>
+Правельных 1D: {{ true_count_1d }}<br>
+Не Правельных 1D: {{ false_count_1d }}<br>
+Правельных 7D: {{ true_count_7d }}<br>
+Не Правельных 7D: {{ false_count_7d }}<br>
+
+
+{{ list2 }}
+  </div>
+  
+
+
+<div class="container py-5">
+
+
+<table class="table table-light table-striped">
 
   <thead>
     <tr>
       <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
-      <th scope="col"><img src="{% static "img/fire.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-      <th scope="col"><img src="{% static "img/water.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-      <th scope="col"><img src="{% static "img/earth.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-	  <th scope="col"><img src="{% static "img/air.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
+      <th scope="col" align = center>Час</th>
+      <th scope="col" align = center>День</th>
+      <th scope="col" align = center>Неделя</th>
     </tr>
   </thead>
    <tbody>
@@ -32,7 +52,7 @@
 	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }}</td>
 	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }}</td>
 	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }}</td>
-	<td align = center class="{% if i.6  <= 0.499 %}table-danger{% endif %}{% if i.6  >= 0.5 %}table-success{% endif %}">{{ i.6 }}</td> 
+
 
     </tr>
 	{% endfor %}
@@ -40,20 +60,6 @@
   </tbody>
 
 </table>
-  </div>
-  
-
-
-<div class="container py-5">
-
-
-
-
-	 
-	 <br>
-	
-	<br>
-	
 
 
 </div>

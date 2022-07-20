@@ -1,10 +1,143 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . models import Predict_grow, Coins
 
 
 
 # Create your views here.
 
+
+def coin_view(request, coin):
+    spirit_list = ['fire','water', 'earth', 'air']
+    try:
+        token = Coins.objects.get(tiker=coin)
+        tokenpair = token.pair
+        predicts = Predict_grow.objects.filter(period = '1h').filter(nn__icontains = 'fire').filter(pair = tokenpair)   #берем только 1H и только по одной NN чтоб не дублировать цены, так как нам нужно получить график цен
+        j = predicts.count()
+        xxxx = [0] * j #будет список списков (датавремя, цена),
+        zzzz = [0] * j
+        j2 = 0
+        for i in predicts:
+            xxxx[j2] = str(i.time_close) #в тимплейте в скрипте vue при передаче списка не забудь добавить safe, потому что javascript не понравятся ковычки - вот так например {{ xxxx|safe }}
+            zzzz[j2] = i.price
+            j2 = j2 + 1
+       
+        
+        
+        return render(request, 'coin.html', {'token': token,
+            'xxxx': xxxx, 'zzzz': zzzz,
+            })
+    except:
+        return redirect ('/')    
+    
+
+def spirit_view(request, spirit):
+    spirit_list = ['fire','water', 'earth', 'air']
+    if spirit in spirit_list:
+
+    
+        tokens = Coins.objects.all()
+        
+        #таблица с прогнозами по каждой монете за каждый период
+        j = tokens.count()
+        list1 = [0] * j #будет список списков (токены из таблицы Cions),
+        j2 = 0
+        list_period = ['1h','1d','7d']
+        
+        for i in tokens:
+            list1[j2] = [i.name, i.tiker, i.logo]
+            tokenpair = i.pair
+            for period in list_period:
+                my_filter = {}
+                my_filter['period'] = period
+                my_filter['nn__icontains'] = spirit
+                my_filter['pair'] = tokenpair
+                try:
+                    predict = Predict_grow.objects.filter(**my_filter).last().value
+                except:
+                    predict = None
+                list1[j2].append(predict)   #добавляем значение predict в конец списка
+            j2 = j2 + 1   
+
+
+
+        #для графика с процентом правильности прогнозов по периодам
+        true_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = spirit).count()
+        false_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = spirit).count()
+        try:
+            percent_1h = true_count_1h / (true_count_1h + false_count_1h)
+        except:
+            percent_1h = 'Dontknow'  
+        
+        true_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = spirit).count()
+        false_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = spirit).count()
+        try:
+            percent_1d = true_count_1d / (true_count_1d + false_count_1d)
+        except:
+            percent_1d = 'Dontknow'  
+            
+        true_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = spirit).count()
+        false_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = spirit).count()
+        try:
+            percent_7d = true_count_7d / (true_count_7d + false_count_7d)
+        except:
+            percent_7d = 'Dontknow'        
+    
+    
+    
+    
+    
+        #процент правильности прогнозов каждого токена по периодам
+        list2 = [0] * j #будет список списков (токены из таблицы Cions),
+        j3 = 0
+        for i in tokens:
+            list2[j3] = [i.name, i.tiker, i.logo]
+            tokenpair = i.pair            
+            
+            true_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            false_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            try:
+                percent_1h_token = true_count_1h_token / (true_count_1h_token + false_count_1h_token)
+            except:
+                percent_1h_token = 'Dontknow'  
+            list2[j3].append(percent_1h_token)
+            
+            true_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            false_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            try:
+                percent_1d_token = true_count_1d_token / (true_count_1d_token + false_count_1d_token)
+            except:
+                percent_1d_token = 'Dontknow'  
+            list2[j3].append(percent_1d_token)
+            
+            true_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            false_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
+            try:
+                percent_7d_token = true_count_7d_token / (true_count_7d_token + false_count_7d_token)
+            except:
+                percent_7d_token = 'Dontknow'        
+            list2[j3].append(percent_7d_token)
+            j3 = j3 + 1
+        
+        
+    
+        return render(request, 'spirit.html', {'spirit': spirit,
+        'list1': list1,
+        'true_count_1h': true_count_1h, 'false_count_1h': false_count_1h,
+        'true_count_1d': true_count_1d, 'false_count_1d': false_count_1d,
+        'true_count_7d': true_count_7d, 'false_count_7d': false_count_7d,
+        'percent_1h': percent_1h, 'percent_1d': percent_1d, 'percent_7d': percent_7d,
+        'list2': list2,
+        
+        })
+
+    return redirect ('/')
+    
+    
+    
+    
+    
+    
+    
 
 def roma_view(request):
     
@@ -35,142 +168,89 @@ def roma_view(request):
     
 def predict_1h_view(request):
 
-    TON_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
-    TON_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
-    TON_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
+#    TON_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
+#    TON_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
+#    TON_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'TONCOIN_USDT').last().value
+ 
+    list_wbt = ['fire', 'water', 'earth', 'air']
     
-    BTC_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'BTC_USDT').last().value
-    BTC_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'BTC_USDT').last().value
-    BTC_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'BTC_USDT').last().value
+    tokens = Coins.objects.all()
+    j = tokens.count()
+    list1 = [0] * j #будет список списков (токены из таблицы Cions)
+    j2 = 0
     
-    ETH_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'ETH_USDT').last().value
-    ETH_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'ETH_USDT').last().value
-    ETH_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'ETH_USDT').last().value
-    
-    BNB_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'BNB_USDT').last().value
-    BNB_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'BNB_USDT').last().value
-    BNB_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'BNB_USDT').last().value
-    
-    DOGE_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'DOGE_USDT').last().value
-    DOGE_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'DOGE_USDT').last().value
-    DOGE_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'DOGE_USDT').last().value
-    
-    ADA_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'ADA_USDT').last().value
-    ADA_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'ADA_USDT').last().value
-    ADA_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'ADA_USDT').last().value
-    
-    TRX_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'TRX_USDT').last().value
-    TRX_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'TRX_USDT').last().value
-    TRX_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'TRX_USDT').last().value
-    
-    XRP_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1h').filter(pair = 'XRP_USDT').last().value
-    XRP_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1h').filter(pair = 'XRP_USDT').last().value
-    XRP_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1h').filter(pair = 'XRP_USDT').last().value
-    
-    return render(request, 'predict_1h.html', {
-    'TON_roma': TON_roma, 'TON_dasha': TON_dasha, 'TON_alisa': TON_alisa, 
-    'BTC_roma': BTC_roma, 'BTC_dasha': BTC_dasha, 'BTC_alisa': BTC_alisa, 
-    'ETH_roma': ETH_roma, 'ETH_dasha': ETH_dasha, 'ETH_alisa': ETH_alisa, 
-    'BNB_roma': BNB_roma, 'BNB_dasha': BNB_dasha, 'BNB_alisa': BNB_alisa, 
-    'DOGE_roma': DOGE_roma, 'DOGE_dasha': DOGE_dasha, 'DOGE_alisa': DOGE_alisa, 
-    'ADA_roma': ADA_roma, 'ADA_dasha': ADA_dasha, 'ADA_alisa': ADA_alisa, 
-    'TRX_roma': TRX_roma, 'TRX_dasha': TRX_dasha, 'TRX_alisa': TRX_alisa, 
-    'XRP_roma': XRP_roma, 'XRP_dasha': XRP_dasha, 'XRP_alisa': XRP_alisa,
-    })
+    for i in tokens:
+        list1[j2] = [i.name, i.tiker, i.logo]
+        tokenpair = i.pair
+        for wbt in list_wbt:
+            my_filter = {}
+            my_filter['period'] = '1h'
+            my_filter['nn__icontains'] = wbt
+            my_filter['pair'] = tokenpair
+            try:
+                predict = Predict_grow.objects.filter(**my_filter).last().value
+            except:
+                predict = None
+            list1[j2].append(predict)   #добавляем значение predict в конец списка
+        j2 = j2 + 1   
+  
+    return render(request, 'predict_1h.html', {'list1': list1,}) #передаем в шаблон словарь, в котором словарь и два списка
 
 
     
 def predict_1d_view(request):
 
-    TON_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'TONCOIN_USDT').last().value
-    TON_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'TONCOIN_USDT').last().value
-    TON_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'TONCOIN_USDT').last().value
+    list_wbt = ['fire', 'water', 'earth', 'air']
     
-    BTC_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'BTC_USDT').last().value
-    BTC_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'BTC_USDT').last().value
-    BTC_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'BTC_USDT').last().value
+    tokens = Coins.objects.all()
+    j = tokens.count()
+    list1 = [0] * j #будет список списков (токены из таблицы Cions)
+    j2 = 0
     
-    ETH_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'ETH_USDT').last().value
-    ETH_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'ETH_USDT').last().value
-    ETH_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'ETH_USDT').last().value
-    
-    BNB_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'BNB_USDT').last().value
-    BNB_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'BNB_USDT').last().value
-    BNB_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'BNB_USDT').last().value
-    
-    DOGE_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'DOGE_USDT').last().value
-    DOGE_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'DOGE_USDT').last().value
-    DOGE_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'DOGE_USDT').last().value
-    
-    ADA_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'ADA_USDT').last().value
-    ADA_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'ADA_USDT').last().value
-    ADA_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'ADA_USDT').last().value
-    
-    TRX_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'TRX_USDT').last().value
-    TRX_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'TRX_USDT').last().value
-    TRX_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'TRX_USDT').last().value
-    
-    XRP_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '1d').filter(pair = 'XRP_USDT').last().value
-    XRP_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '1d').filter(pair = 'XRP_USDT').last().value
-    XRP_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '1d').filter(pair = 'XRP_USDT').last().value
-    
-    return render(request, 'predict_1d.html', {
-    'TON_roma': TON_roma, 'TON_dasha': TON_dasha, 'TON_alisa': TON_alisa, 
-    'BTC_roma': BTC_roma, 'BTC_dasha': BTC_dasha, 'BTC_alisa': BTC_alisa, 
-    'ETH_roma': ETH_roma, 'ETH_dasha': ETH_dasha, 'ETH_alisa': ETH_alisa, 
-    'BNB_roma': BNB_roma, 'BNB_dasha': BNB_dasha, 'BNB_alisa': BNB_alisa, 
-    'DOGE_roma': DOGE_roma, 'DOGE_dasha': DOGE_dasha, 'DOGE_alisa': DOGE_alisa, 
-    'ADA_roma': ADA_roma, 'ADA_dasha': ADA_dasha, 'ADA_alisa': ADA_alisa, 
-    'TRX_roma': TRX_roma, 'TRX_dasha': TRX_dasha, 'TRX_alisa': TRX_alisa, 
-    'XRP_roma': XRP_roma, 'XRP_dasha': XRP_dasha, 'XRP_alisa': XRP_alisa,
-    })
+    for i in tokens:
+        list1[j2] = [i.name, i.tiker, i.logo]
+        tokenpair = i.pair
+        for wbt in list_wbt:
+            my_filter = {}
+            my_filter['period'] = '1d'
+            my_filter['nn__icontains'] = wbt
+            my_filter['pair'] = tokenpair
+            try:
+                predict = Predict_grow.objects.filter(**my_filter).last().value
+            except:
+                predict = None
+            list1[j2].append(predict)   #добавляем значение predict в конец списка
+        j2 = j2 + 1   
+  
+    return render(request, 'predict_1d.html', {'list1': list1,}) #передаем в шаблон словарь, в котором словарь и два списка
     
 
   
 def predict_7d_view(request):
 
-    TON_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'TONCOIN_USDT').last().value
-    TON_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'TONCOIN_USDT').last().value
-    TON_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'TONCOIN_USDT').last().value
+    list_wbt = ['fire', 'water', 'earth', 'air']
     
-    BTC_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'BTC_USDT').last().value
-    BTC_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'BTC_USDT').last().value
-    BTC_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'BTC_USDT').last().value
+    tokens = Coins.objects.all()
+    j = tokens.count()
+    list1 = [0] * j #будет список списков (токены из таблицы Cions)
+    j2 = 0
     
-    ETH_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'ETH_USDT').last().value
-    ETH_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'ETH_USDT').last().value
-    ETH_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'ETH_USDT').last().value
-    
-    BNB_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'BNB_USDT').last().value
-    BNB_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'BNB_USDT').last().value
-    BNB_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'BNB_USDT').last().value
-    
-    DOGE_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'DOGE_USDT').last().value
-    DOGE_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'DOGE_USDT').last().value
-    DOGE_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'DOGE_USDT').last().value
-    
-    ADA_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'ADA_USDT').last().value
-    ADA_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'ADA_USDT').last().value
-    ADA_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'ADA_USDT').last().value
-    
-    TRX_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'TRX_USDT').last().value
-    TRX_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'TRX_USDT').last().value
-    TRX_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'TRX_USDT').last().value
-    
-    XRP_roma = Predict_grow.objects.filter(nn__icontains = 'roma').filter(period = '7d').filter(pair = 'XRP_USDT').last().value
-    XRP_dasha = Predict_grow.objects.filter(nn__icontains = 'dasha').filter(period = '7d').filter(pair = 'XRP_USDT').last().value
-    XRP_alisa = Predict_grow.objects.filter(nn__icontains = 'alisa').filter(period = '7d').filter(pair = 'XRP_USDT').last().value
-    
-    return render(request, 'predict_7d.html', {
-    'TON_roma': TON_roma, 'TON_dasha': TON_dasha, 'TON_alisa': TON_alisa, 
-    'BTC_roma': BTC_roma, 'BTC_dasha': BTC_dasha, 'BTC_alisa': BTC_alisa, 
-    'ETH_roma': ETH_roma, 'ETH_dasha': ETH_dasha, 'ETH_alisa': ETH_alisa, 
-    'BNB_roma': BNB_roma, 'BNB_dasha': BNB_dasha, 'BNB_alisa': BNB_alisa, 
-    'DOGE_roma': DOGE_roma, 'DOGE_dasha': DOGE_dasha, 'DOGE_alisa': DOGE_alisa, 
-    'ADA_roma': ADA_roma, 'ADA_dasha': ADA_dasha, 'ADA_alisa': ADA_alisa, 
-    'TRX_roma': TRX_roma, 'TRX_dasha': TRX_dasha, 'TRX_alisa': TRX_alisa, 
-    'XRP_roma': XRP_roma, 'XRP_dasha': XRP_dasha, 'XRP_alisa': XRP_alisa,
-    })
+    for i in tokens:
+        list1[j2] = [i.name, i.tiker, i.logo]
+        tokenpair = i.pair
+        for wbt in list_wbt:
+            my_filter = {}
+            my_filter['period'] = '7d'
+            my_filter['nn__icontains'] = wbt
+            my_filter['pair'] = tokenpair
+            try:
+                predict = Predict_grow.objects.filter(**my_filter).last().value
+            except:
+                predict = None
+            list1[j2].append(predict)   #добавляем значение predict в конец списка
+        j2 = j2 + 1   
+  
+    return render(request, 'predict_7d.html', {'list1': list1,}) #передаем в шаблон словарь, в котором словарь и два списка
     
 
  

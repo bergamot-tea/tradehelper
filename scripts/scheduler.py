@@ -1,6 +1,6 @@
 import os, time
 from datetime import datetime, timedelta
-from helperapp.models import Predict_grow
+from helperapp.models import Predict_grow, Coins
 import schedule
 import requests
 
@@ -37,7 +37,8 @@ def get_from_flask_api(market, tick_interval, tick_limit, nn_name, period_predic
     newpredict.price = price
     newpredict.trueorfalse = None
     
-    unix_time_close = int(unix_time_close)
+    #unix_time_close = int(unix_time_close)
+    unix_time_close = int(unix_time_close) / 1000
     datetime_close = datetime.utcfromtimestamp(unix_time_close)#переводим юникс-время в формат YYYY-MM-DD HH:MM[:ss[.uuuuuu]]
     
     newpredict.time_close = datetime_close
@@ -124,26 +125,36 @@ def check_predict_true_or_false (period_predict):
 #schedule.every().hour.do(get_from_binance_in_csv, 'ETHUSDT', '1h')
 
 
-list_token_pair = ['TONCOIN_USDT', 'BTC_USDT', 'ETH_USDT', 'BNB_USDT', 'DOGE_USDT', 'ADA_USDT', 'TRX_USDT', 'XRP_USDT']
-
+tokens = Coins.objects.all()
+j1 = tokens.count()
+list_token_pair = [0] * j1 #будет список торговых пар
+j2 = 0
+for i in tokens:
+    list_token_pair[j2] = i.pair
+    j2 = j2 + 1   
+#получили список торговых пар токенов из таблицы Coins, если добавляем токен в Coins то чтоб шедулер его подхватил нужно перезапустить контейнер
 
 #если tick_limit 75 а не 100 то будут NaN-ы
 
 #1h прогноз
 for x in list_token_pair:
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_roma', '1h', '12')
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_dasha', '1h', '12')
-    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'gateio_v1_alisa', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'fire_test', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'water_test', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'earth_test', '1h', '12')
+    schedule.every(10).minutes.at(":01").do(get_from_flask_api, x, '5m', '100', 'air_test', '1h', '12')
 #1d прогноз
 for x in list_token_pair:
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_roma', '1d', '24')
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_dasha', '1d', '24')
-    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'gateio_v1_alisa', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'fire_test', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'water_test', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'earth_test', '1d', '24')
+    schedule.every().hour.at(":04").do(get_from_flask_api, x, '1h', '100', 'air_test', '1d', '24')
 #7d прогноз
 for x in list_token_pair:
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_roma', '7d', '21')
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_dasha', '7d', '21')
-    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'gateio_v1_alisa', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'fire_test', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'water_test', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'earth_test', '7d', '21')
+    schedule.every().day.at("00:07").do(get_from_flask_api, x, '8h', '100', 'air_test', '7d', '21')
+    
 
 
 schedule.every(10).minutes.at(":03").do(check_predict_true_or_false, '1h')

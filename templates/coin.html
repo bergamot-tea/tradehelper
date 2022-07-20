@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+
+
+<div class="container col-xxl-8 px-4 py-5">
+
+ <h5 align='center'>{{ token.name }} ({{ token.tiker }})</h5><br>  <br>
+
+ <img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="32" height="32"> 
+ <br>
+
+
+
+  </div>
+  
+
+
+
+ 
+
+<div class="container py-5">
+  <canvas id="myChart" width="400" height="100" role="img"></canvas>
+</div>
+
+
+
+
+
+<div class="container py-5">
+
+
+ <br>
+ 
+
+ 
+ 
+<!--
+<table class="table table-light table-striped">
+
+  <thead>
+    <tr>
+      <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
+      <th scope="col" align = center>Час</th>
+      <th scope="col" align = center>День</th>
+      <th scope="col" align = center>Неделя</th>
+    </tr>
+  </thead>
+   <tbody>
+   
+   	{% for i in list1 %}
+    <tr>
+	
+		
+	<th scope="row"> <a href="/"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
+	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }}</td>
+	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }}</td>
+	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }}</td>
+
+
+    </tr>
+	{% endfor %}
+	
+  </tbody>
+
+</table>
+-->
+
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+  const labels = {{ xxxx|safe }}
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Стоимость в USD',
+      backgroundColor: 'rgb(0, 0, 0)',
+      borderColor: 'rgb(0, 0, 0)',
+      data: {{ zzzz }},
+    }]
+  };
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {}
+  };
+</script>
+
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
