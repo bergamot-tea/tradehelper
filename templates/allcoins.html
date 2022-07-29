@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+
+
+  
+
+
+<div class="container py-5">
+
+
+
+<div class="container px-4 py-5" id="icon-grid">
+    <h2 class="pb-2 border-bottom">Криптовалюты</h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+	
+	
+		{% for i in list1 %}
+		
+      <div class="col d-flex align-items-start">
+	  
+	  <div class="row row-cols-auto g-1 ">
+    <div class="col"><a href="/coins/{{ i.1 }}"><img class="" src="/static/img/{{ i.2 }}" alt="" width="40" height="40"></a></div>
+    <div class="col">
+		<h5 class="fw-bold mb-0">&nbsp&nbsp {{ i.0 }} </h5>
+          <p class="mb-0">&nbsp&nbsp&nbsp   {{ i.3 }}&nbsp$ </p>
+	</div>
+	
+    <div class="col py-0">
+	<span class="badge {% if i.4  < 0 %}text-danger{% endif %}{% if i.4  >= 0 %}text-success{% endif %}">Ч: {{ i.4 }}%</span>
+	<span class="badge {% if i.5  < 0 %}text-danger{% endif %}{% if i.5  >= 0 %}text-success{% endif %}">Д: {{ i.5 }}%</span>
+	<span class="badge {% if i.6  < 0 %}text-danger{% endif %}{% if i.6  >= 0 %}text-success{% endif %}">Н: {{ i.6 }}%</span>
+	
+	</div>
+
+  </div>
+	  
+	  
+
+      </div>
+	  
+	  {% endfor %}
+  
+    </div>
+  </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

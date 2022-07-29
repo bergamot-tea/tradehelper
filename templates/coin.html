@@ -10,9 +10,8 @@
 
 <div class="container col-xxl-8 px-4 py-5">
 
- <h5 align='center'>{{ token.name }} ({{ token.tiker }})</h5><br>  <br>
+ <h4 class="pb-2 border-bottom"><img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="40" height="40">&nbsp&nbsp {{ token.name }} ({{ token.tiker }})</h4>
 
- <img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="32" height="32"> 
  <br>
 
 
@@ -25,7 +24,8 @@
  
 
 <div class="container py-5">
-  <canvas id="myChart" width="400" height="100" role="img"></canvas>
+<h5 align="center">Последние 7 дней</h5>
+  <canvas id="myChart" width="400" height="200" role="img"></canvas>
 </div>
 
 
@@ -33,7 +33,8 @@
 
 
 <div class="container py-5">
-
+<h5 align="center">Часовые прогнозы</h5>
+<canvas id="myChart2" width="400" height="200" role="img"></canvas>
 
  <br>
  
@@ -41,35 +42,20 @@
  
  
 <!--
-<table class="table table-light table-striped">
-
-  <thead>
-    <tr>
-      <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
-      <th scope="col" align = center>Час</th>
-      <th scope="col" align = center>День</th>
-      <th scope="col" align = center>Неделя</th>
-    </tr>
-  </thead>
-   <tbody>
-   
-   	{% for i in list1 %}
-    <tr>
-	
-		
-	<th scope="row"> <a href="/"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
-	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }}</td>
-	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }}</td>
-	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }}</td>
-
-
-    </tr>
-	{% endfor %}
-	
-  </tbody>
-
-</table>
+{{ yyyy.0|safe }}
+{{ yyyy.1|safe }}
+--------------
+{{ yyyy.2|safe }}
+{{ yyyy.3|safe }}
+-------------
+{{ yyyy.4|safe }}
+{{ yyyy.5|safe }}
+-----------------------
+{{ yyyy.6|safe }}
+{{ yyyy.7|safe }}
 -->
+
+
 
 </div>
 
@@ -79,34 +65,115 @@
 
 {% block scripts %}
 
+
 <script>
-  const labels = {{ xxxx|safe }}
 
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: 'Стоимость в USD',
-      backgroundColor: 'rgb(0, 0, 0)',
-      borderColor: 'rgb(0, 0, 0)',
-      data: {{ zzzz }},
-    }]
-  };
+new Chart(document.getElementById("myChart"), {
+  type: 'line',
+  data: {
+    labels: {{ xxxx|safe }},
+    datasets: [{ 
+        data: {{ zzzz }},
+        label: "Цена в USD",
+        borderColor: "#3e95cd",
+        fill: false,
+		tension: 0.1,
+		backgroundColor: "#ffffff",
+      }, 
+	  
+	  
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: ''
+    }
+  }
+});
 
-  const config = {
-    type: 'line',
-    data: data,
-    options: {}
-  };
 </script>
 
 <script>
-  const myChart = new Chart(
-    document.getElementById('myChart'),
-    config
-  );
+
+new Chart(document.getElementById("myChart2"), {
+  type: 'line',
+  
+ 
+  
+  data: {
+    labels: {{ xxxx|safe }},
+    datasets: [{ 
+        data: {{ yyyy.0|safe }},
+        label: "Часовой прогноз духа огня",
+        borderColor: "#3e95cd",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ yyyy.1|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						return color;
+						},
+
+		borderWidth: 0
+      }, 
+	{ 
+        data: {{ yyyy.2|safe }},
+        label: "Часовой прогноз духа воды",
+        //borderColor: "#8e5ea2",
+        fill: false,
+		tension: 0.1,
+		//backgroundColor: "#0038c9",
+		
+		
+		my_color: {{ yyyy.3|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						return color;
+						},
+		
+		borderWidth: 0
+      },
+		{ 
+        data: {{ yyyy.4|safe }},
+        label: "Часовой прогноз духа земля",
+        borderColor: "#3cba9f",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ yyyy.5|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						return color;
+						},
+		borderWidth: 0
+      },
+	  { 
+        data: {{ yyyy.6|safe }},
+        label: "Часовой прогноз духа воздух",
+        borderColor: "#c45850",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ yyyy.7|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						return color;
+						},
+		borderWidth: 0
+      },
+	  
+    ]
+  },
+  options: {
+  
+
+    title: {
+      display: true,
+      text: ''
+    }
+  }
+});
+
 </script>
-
-
 
 
 {% endblock %}

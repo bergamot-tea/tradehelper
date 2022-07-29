@@ -9,17 +9,17 @@
 
 <div class="container col-xxl-8 px-4 py-5">
 
- <h5 align='center'>Прогноз роста цены криптовалют через 7 дней!</h5><br><br>
+ <h3 class="pb-2 border-bottom" align='center'>Прогноз роста цены криптовалют через 7 дней!</h3><br><br>
 
 <table class="table table-secondary table-striped">
 
   <thead>
     <tr>
       <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
-      <th scope="col"><img src="{% static "img/fire.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-      <th scope="col"><img src="{% static "img/water.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-      <th scope="col"><img src="{% static "img/earth.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
-	  <th scope="col"><img src="{% static "img/air.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></th>
+      <th scope="col"><a href="/fire"><img src="{% static "img/fire.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></a></th>
+      <th scope="col"><a href="/water"><img src="{% static "img/water.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></a></th>
+      <th scope="col"><a href="/earth"><img src="{% static "img/earth.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></a></th>
+	  <th scope="col"><a href="/air"><img src="{% static "img/air.png"%}" class="d-block mx-lg-auto img-fluid" alt="" width="30" loading="lazy"></a></th>
     </tr>
   </thead>
    <tbody>
@@ -28,7 +28,7 @@
     <tr>
 	
 		
-	<th scope="row"> <a href="/"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
+	<th scope="row"> <a href="/coins/{{ i.1 }}"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
 	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }}</td>
 	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }}</td>
 	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }}</td>
