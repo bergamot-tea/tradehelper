@@ -80,30 +80,68 @@ def coin_view(request, coin):
 
     timenow = datetime.now()
     time_7d_early = timenow - timedelta(days = 7)
+    time_1d_early = timenow - timedelta(days = 1)
+    time_30d_early = timenow - timedelta(days = 30)
     
     spirit_list = ['fire','water', 'earth', 'air']
     try:
         token = Coins.objects.get(tiker=coin)
         tokenpair = token.pair
+                
         predicts_fire = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)   #берем только 1H и только по одной NN чтоб не дублировать цены, так как нам нужно получить график цен
         j = predicts_fire.count()
-        xxxx = [0] * j #будет список c датами-временем,
-        zzzz = [0] * j #будет список с ценами
+        xxxx = [0] * j #будет список c датами-временем часовых предиктов 
+        
+        
+        #--------------получаем список c датами-временем дневных предиктов за неделю 
+        predicts_fire_1d = Predict_grow.objects.filter(period = '1d').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        сount_1d = predicts_fire_1d.count()
+        xxxx_1d = [0] * сount_1d #будет список c датами-временем предиктов
+        j8 = 0
+        for i in predicts_fire_1d:
+            str_time = str(i.time_close)
+            xxxx_1d[j8] = str_time[:-9]  # удаляем лишнюю точность времени(последние 9 символов строки) #в тимплейте в скрипте vue при передаче списка не забудь добавить safe, потому что javascript не понравятся ковычки - вот так например {{ xxxx|safe }}
+            j8 = j8 + 1    
 
+
+        #--------------получаем список c датами-временем часовых предиктов за день
+        predicts_fire_1h = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_1d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        сount_1h = predicts_fire_1h.count()
+        xxxx_1h = [0] * сount_1h #будет список c датами-временем предиктов
+        j9 = 0
+        for i in predicts_fire_1h:
+            str_time = str(i.time_close)
+            xxxx_1h[j9] = str_time[:-9]  # удаляем лишнюю точность времени(последние 9 символов строки) #в тимплейте в скрипте vue при передаче списка не забудь добавить safe, потому что javascript не понравятся ковычки - вот так например {{ xxxx|safe }}
+            j9 = j9 + 1 
+            
+        #--------------получаем список c датами-временем недельных предиктов за месяц
+        predicts_fire_7d = Predict_grow.objects.filter(period = '7d').filter(time__gte = time_30d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        сount_7d = predicts_fire_7d.count()
+        xxxx_7d = [0] * сount_7d #будет список c датами-временем предиктов
+        j10 = 0
+        for i in predicts_fire_7d:
+            str_time = str(i.time_close)
+            xxxx_7d[j10] = str_time[:-9]  # удаляем лишнюю точность времени(последние 9 символов строки) #в тимплейте в скрипте vue при передаче списка не забудь добавить safe, потому что javascript не понравятся ковычки - вот так например {{ xxxx|safe }}
+            j10 = j10 + 1             
+
+        #------------график цены------------------
         j2 = 0
+        zzzz = [0] * j #будет список с ценами
         for i in predicts_fire:
             str_time = str(i.time_close)
             xxxx[j2] = str_time[:-9]  # удаляем лишнюю точность времени(последние 9 символов строки) #в тимплейте в скрипте vue при передаче списка не забудь добавить safe, потому что javascript не понравятся ковычки - вот так например {{ xxxx|safe }}
             zzzz[j2] = i.price
             j2 = j2 + 1
-        
+            
+            
+        #--------------график часовых предиктов за день------------------------
         j3 = 0
         yyyy = [0] * 8 #будет список из восьми длинных списков: 0 - прогнозы fire за неделю, 1 - труорфолсы fire за неделю (цвета зеленый красный серый для графика), 2 - пронозы water, 3 - труорфолс water и т.д.
         for i in spirit_list:
             my_filter = {}
             my_filter['period'] = '1h'
             my_filter['pair'] = tokenpair
-            my_filter['time__gte'] = time_7d_early
+            my_filter['time__gte'] = time_1d_early
             my_filter['nn__icontains'] = i
             predicts = Predict_grow.objects.filter(**my_filter)
             jj = predicts.count()
@@ -134,10 +172,95 @@ def coin_view(request, coin):
             j3 = j3 + 1
                 
                 
-        
+        #--------------график дневных предиктов за неделю------------------------        
+ 
+        j5 = 0
+        aaaa = [0] * 8 #будет список из восьми длинных списков: 0 - прогнозы fire за неделю, 1 - труорфолсы fire за неделю (цвета зеленый красный серый для графика), 2 - пронозы water, 3 - труорфолс water и т.д.
+        for i in spirit_list:
+            
+            my_filter = {}
+            my_filter['period'] = '1d'
+            my_filter['pair'] = tokenpair
+            my_filter['time__gte'] = time_7d_early
+            my_filter['nn__icontains'] = i
+            predicts = Predict_grow.objects.filter(**my_filter)
+            jj = predicts.count()
+            
+            wwww = [0] * jj
+            j4 = 0
+            for h in predicts:
+                wwww[j4] = h.value
+                j4 = j4 + 1
+            aaaa[j5] = wwww
+            
+            j5 = j5 + 1
+            
+            wwww = [0] * jj
+            j4 = 0
+                        
+            for h in predicts:
+                color = ''
+                if h.trueorfalse == True:
+                    color = 'green'
+                elif h.trueorfalse == False:
+                    color = 'red'
+                else:
+                    color = 'gray'
+                wwww[j4] = color
+                j4 = j4 + 1
+               
+            aaaa[j5] = wwww
+            
+            j5 = j5 + 1
+
+
+
+#--------------график недельных предиктов за месяц------------------------        
+ 
+        j10 = 0
+        bbbb = [0] * 8 #будет список из восьми длинных списков: 0 - прогнозы fire , 1 - труорфолсы fire  (цвета зеленый красный серый для графика), 2 - пронозы water, 3 - труорфолс water и т.д.
+        for i in spirit_list:
+            
+            my_filter = {}
+            my_filter['period'] = '7d'
+            my_filter['pair'] = tokenpair
+            my_filter['time__gte'] = time_30d_early
+            my_filter['nn__icontains'] = i
+            predicts = Predict_grow.objects.filter(**my_filter)
+            jj = predicts.count()
+            
+            wwww = [0] * jj
+            j4 = 0
+            for h in predicts:
+                wwww[j4] = h.value
+                j4 = j4 + 1
+            bbbb[j10] = wwww
+            
+            j10 = j10 + 1
+            
+            wwww = [0] * jj
+            j4 = 0
+                        
+            for h in predicts:
+                color = ''
+                if h.trueorfalse == True:
+                    color = 'green'
+                elif h.trueorfalse == False:
+                    color = 'red'
+                else:
+                    color = 'gray'
+                wwww[j4] = color
+                j4 = j4 + 1
+               
+            bbbb[j10] = wwww
+            
+            j10 = j10 + 1
+
+
+ 
         
         return render(request, 'coin.html', {'token': token,
-            'xxxx': xxxx, 'zzzz': zzzz, 'yyyy': yyyy,
+            'xxxx': xxxx, 'zzzz': zzzz, 'yyyy': yyyy, 'aaaa': aaaa, 'xxxx_1d': xxxx_1d, 'xxxx_1h': xxxx_1h, 'xxxx_7d': xxxx_7d, 'bbbb': bbbb,
           
             
             })

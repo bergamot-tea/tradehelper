@@ -24,7 +24,7 @@
  
 
 <div class="container py-5">
-<h5 align="center">Последние 7 дней</h5>
+<h5 align="center">Цена последние 7 дней</h5>
   <canvas id="myChart" width="400" height="200" role="img"></canvas>
 </div>
 
@@ -33,14 +33,22 @@
 
 
 <div class="container py-5">
-<h5 align="center">Часовые прогнозы</h5>
+<h5 align="center">Прогнозы на час за последний день</h5>
 <canvas id="myChart2" width="400" height="200" role="img"></canvas>
-
+</div>
  <br>
  
-
+<div class="container py-5">
+<h5 align="center">Прогнозы на день за последнюю неделю</h5>
+<canvas id="myChart3" width="400" height="200" role="img"></canvas>
+</div>
+ <br>
  
- 
+ <div class="container py-5">
+<h5 align="center">Прогнозы на неделю за последний месяц</h5>
+<canvas id="myChart4" width="400" height="200" role="img"></canvas>
+</div>
+ <br>
 <!--
 {{ yyyy.0|safe }}
 {{ yyyy.1|safe }}
@@ -57,7 +65,7 @@
 
 
 
-</div>
+
 
 
 {% endblock %}
@@ -67,7 +75,7 @@
 
 
 <script>
-
+//график цены
 new Chart(document.getElementById("myChart"), {
   type: 'line',
   data: {
@@ -95,23 +103,23 @@ new Chart(document.getElementById("myChart"), {
 </script>
 
 <script>
-
+//график часовых предиктов
 new Chart(document.getElementById("myChart2"), {
   type: 'line',
   
  
   
   data: {
-    labels: {{ xxxx|safe }},
+    labels: {{ xxxx_1h|safe }},
     datasets: [{ 
         data: {{ yyyy.0|safe }},
-        label: "Часовой прогноз духа огня",
+        label: "Огонь",
         borderColor: "#3e95cd",
         fill: false,
 		tension: 0.1,
 		my_color: {{ yyyy.1|safe }},
 		backgroundColor:  function(context, options) {
-						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						const color = options.my_color; //функция возвращает значения из my_color:
 						return color;
 						},
 
@@ -119,7 +127,7 @@ new Chart(document.getElementById("myChart2"), {
       }, 
 	{ 
         data: {{ yyyy.2|safe }},
-        label: "Часовой прогноз духа воды",
+        label: "Вода",
         //borderColor: "#8e5ea2",
         fill: false,
 		tension: 0.1,
@@ -128,7 +136,7 @@ new Chart(document.getElementById("myChart2"), {
 		
 		my_color: {{ yyyy.3|safe }},
 		backgroundColor:  function(context, options) {
-						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						const color = options.my_color;
 						return color;
 						},
 		
@@ -136,26 +144,26 @@ new Chart(document.getElementById("myChart2"), {
       },
 		{ 
         data: {{ yyyy.4|safe }},
-        label: "Часовой прогноз духа земля",
+        label: "Земля",
         borderColor: "#3cba9f",
         fill: false,
 		tension: 0.1,
 		my_color: {{ yyyy.5|safe }},
 		backgroundColor:  function(context, options) {
-						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						const color = options.my_color;
 						return color;
 						},
 		borderWidth: 0
       },
 	  { 
         data: {{ yyyy.6|safe }},
-        label: "Часовой прогноз духа воздух",
+        label: "Воздух",
         borderColor: "#c45850",
         fill: false,
 		tension: 0.1,
 		my_color: {{ yyyy.7|safe }},
 		backgroundColor:  function(context, options) {
-						const color = options.my_color; // resolve the value of anot	her scriptable option: 'red', 'blue' or 'green'
+						const color = options.my_color;
 						return color;
 						},
 		borderWidth: 0
@@ -175,6 +183,169 @@ new Chart(document.getElementById("myChart2"), {
 
 </script>
 
+
+
+<script>
+//график дневных предиктов
+new Chart(document.getElementById("myChart3"), {
+  type: 'line',
+  
+ 
+  
+  data: {
+    labels: {{ xxxx_1d|safe }},
+    datasets: [{ 
+        data: {{ aaaa.0|safe }},
+        label: "Дневной прогноз духа огня",
+        borderColor: "#3e95cd",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ aaaa.1|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; //функция возвращает значения из my_color:
+						return color;
+						},
+
+		borderWidth: 0
+      }, 
+	{ 
+        data: {{ aaaa.2|safe }},
+        label: "Дневной прогноз духа воды",
+        //borderColor: "#8e5ea2",
+        fill: false,
+		tension: 0.1,
+		//backgroundColor: "#0038c9",
+		
+		
+		my_color: {{ aaaa.3|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		
+		borderWidth: 0
+      },
+		{ 
+        data: {{ aaaa.4|safe }},
+        label: "Дневной прогноз духа земля",
+        borderColor: "#3cba9f",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ aaaa.5|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		borderWidth: 0
+      },
+	  { 
+        data: {{ aaaa.6|safe }},
+        label: "Дневной прогноз духа воздух",
+        borderColor: "#c45850",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ aaaa.7|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		borderWidth: 0
+      },
+	  
+    ]
+  },
+  options: {
+  
+
+    title: {
+      display: true,
+      text: ''
+    }
+  }
+});
+
+</script>
+
+<script>
+//график недельных предиктов
+new Chart(document.getElementById("myChart4"), {
+  type: 'line',
+  
+ 
+  
+  data: {
+    labels: {{ xxxx_7d|safe }},
+    datasets: [{ 
+        data: {{ bbbb.0|safe }},
+        label: "прогноз духа огня",
+        borderColor: "#3e95cd",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ bbbb.1|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color; //функция возвращает значения из my_color:
+						return color;
+						},
+
+		borderWidth: 0
+      }, 
+	{ 
+        data: {{ bbbb.2|safe }},
+        label: "прогноз духа воды",
+        //borderColor: "#8e5ea2",
+        fill: false,
+		tension: 0.1,
+		//backgroundColor: "#0038c9",
+		
+		
+		my_color: {{ bbbb.3|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		
+		borderWidth: 0
+      },
+		{ 
+        data: {{ bbbb.4|safe }},
+        label: "прогноз духа земля",
+        borderColor: "#3cba9f",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ bbbb.5|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		borderWidth: 0
+      },
+	  { 
+        data: {{ bbbb.6|safe }},
+        label: "прогноз духа воздух",
+        borderColor: "#c45850",
+        fill: false,
+		tension: 0.1,
+		my_color: {{ bbbb.7|safe }},
+		backgroundColor:  function(context, options) {
+						const color = options.my_color;
+						return color;
+						},
+		borderWidth: 0
+      },
+	  
+    ]
+  },
+  options: {
+  
+
+    title: {
+      display: true,
+      text: ''
+    }
+  }
+});
+
+</script>
 
 {% endblock %}
 
