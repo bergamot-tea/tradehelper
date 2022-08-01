@@ -88,13 +88,13 @@ def coin_view(request, coin):
         token = Coins.objects.get(tiker=coin)
         tokenpair = token.pair
                 
-        predicts_fire = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)   #берем только 1H и только по одной NN чтоб не дублировать цены, так как нам нужно получить график цен
+        predicts_fire = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')   #берем только 1H и только по одной NN чтоб не дублировать цены, так как нам нужно получить график цен
         j = predicts_fire.count()
         xxxx = [0] * j #будет список c датами-временем часовых предиктов 
         
         
         #--------------получаем список c датами-временем дневных предиктов за неделю 
-        predicts_fire_1d = Predict_grow.objects.filter(period = '1d').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        predicts_fire_1d = Predict_grow.objects.filter(period = '1d').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')
         сount_1d = predicts_fire_1d.count()
         xxxx_1d = [0] * сount_1d #будет список c датами-временем предиктов
         j8 = 0
@@ -105,7 +105,7 @@ def coin_view(request, coin):
 
 
         #--------------получаем список c датами-временем часовых предиктов за день
-        predicts_fire_1h = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_1d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        predicts_fire_1h = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_1d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')
         сount_1h = predicts_fire_1h.count()
         xxxx_1h = [0] * сount_1h #будет список c датами-временем предиктов
         j9 = 0
@@ -115,7 +115,7 @@ def coin_view(request, coin):
             j9 = j9 + 1 
             
         #--------------получаем список c датами-временем недельных предиктов за месяц
-        predicts_fire_7d = Predict_grow.objects.filter(period = '7d').filter(time__gte = time_30d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair)
+        predicts_fire_7d = Predict_grow.objects.filter(period = '7d').filter(time__gte = time_30d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')
         сount_7d = predicts_fire_7d.count()
         xxxx_7d = [0] * сount_7d #будет список c датами-временем предиктов
         j10 = 0
