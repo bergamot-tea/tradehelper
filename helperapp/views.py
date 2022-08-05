@@ -43,6 +43,11 @@ def check_delta_price (tokenpair):
 
 
 
+def donate_view(request):
+ 
+    return render(request, 'donate.html', )  
+
+
 # Create your views here.
 
 def allcoins_view(request):
@@ -77,7 +82,9 @@ def allcoins_view(request):
 
 
 def coin_view(request, coin):
-
+    
+       
+    
     timenow = datetime.now()
     time_7d_early = timenow - timedelta(days = 7)
     time_1d_early = timenow - timedelta(days = 1)
@@ -87,11 +94,24 @@ def coin_view(request, coin):
     try:
         token = Coins.objects.get(tiker=coin)
         tokenpair = token.pair
-                
+         
+        
+        
+        
+        #--------------шкала даты время для графика цены---------
+
+         
         predicts_fire = Predict_grow.objects.filter(period = '1h').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')   #берем только 1H и только по одной NN чтоб не дублировать цены, так как нам нужно получить график цен
         j = predicts_fire.count()
         xxxx = [0] * j #будет список c датами-временем часовых предиктов 
         
+        #----------------список цена и изменения Ч Д Н----------
+        list_price = []#----------------список цена и изменения Ч Д Н
+        last_pr = predicts_fire.last().price
+        list_price.append(last_pr)
+        list_delta_price = check_delta_price(tokenpair)
+        list_price.extend(list_delta_price)
+               
         
         #--------------получаем список c датами-временем дневных предиктов за неделю 
         predicts_fire_1d = Predict_grow.objects.filter(period = '1d').filter(time__gte = time_7d_early).filter(nn__icontains = 'fire').filter(pair = tokenpair).order_by('id')
@@ -143,7 +163,7 @@ def coin_view(request, coin):
             my_filter['pair'] = tokenpair
             my_filter['time__gte'] = time_1d_early
             my_filter['nn__icontains'] = i
-            predicts = Predict_grow.objects.filter(**my_filter)
+            predicts = Predict_grow.objects.filter(**my_filter).order_by('id')
             jj = predicts.count()
             
             wwww = [0] * jj
@@ -183,7 +203,7 @@ def coin_view(request, coin):
             my_filter['pair'] = tokenpair
             my_filter['time__gte'] = time_7d_early
             my_filter['nn__icontains'] = i
-            predicts = Predict_grow.objects.filter(**my_filter)
+            predicts = Predict_grow.objects.filter(**my_filter).order_by('id')
             jj = predicts.count()
             
             wwww = [0] * jj
@@ -226,7 +246,7 @@ def coin_view(request, coin):
             my_filter['pair'] = tokenpair
             my_filter['time__gte'] = time_30d_early
             my_filter['nn__icontains'] = i
-            predicts = Predict_grow.objects.filter(**my_filter)
+            predicts = Predict_grow.objects.filter(**my_filter).order_by('id')
             jj = predicts.count()
             
             wwww = [0] * jj
@@ -260,7 +280,7 @@ def coin_view(request, coin):
  
         
         return render(request, 'coin.html', {'token': token,
-            'xxxx': xxxx, 'zzzz': zzzz, 'yyyy': yyyy, 'aaaa': aaaa, 'xxxx_1d': xxxx_1d, 'xxxx_1h': xxxx_1h, 'xxxx_7d': xxxx_7d, 'bbbb': bbbb,
+            'xxxx': xxxx, 'zzzz': zzzz, 'yyyy': yyyy, 'aaaa': aaaa, 'xxxx_1d': xxxx_1d, 'xxxx_1h': xxxx_1h, 'xxxx_7d': xxxx_7d, 'bbbb': bbbb, 'list_price': list_price,
           
             
             })
@@ -360,9 +380,9 @@ def spirit_view(request, spirit):
     
         return render(request, 'spirit.html', {'spirit': spirit,
         'list1': list1,
-        'true_count_1h': true_count_1h, 'false_count_1h': false_count_1h,
-        'true_count_1d': true_count_1d, 'false_count_1d': false_count_1d,
-        'true_count_7d': true_count_7d, 'false_count_7d': false_count_7d,
+#        'true_count_1h': true_count_1h, 'false_count_1h': false_count_1h,
+#        'true_count_1d': true_count_1d, 'false_count_1d': false_count_1d,
+#        'true_count_7d': true_count_7d, 'false_count_7d': false_count_7d,
         'percent_1h': percent_1h, 'percent_1d': percent_1d, 'percent_7d': percent_7d,
         'list2': list2,
         

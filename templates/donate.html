@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+
+
+  
+
+
+<div class="container py-5 text-center">
+
+
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+
+<p>Вы можете подкинуть нам пару монет по адресу:</p> 
+
+<figure class="text-center">
+  <blockquote class="blockquote">
+    <p>0x503629000D3F94E4192316F1cA9Cc856d8Bea594</p>
+  </blockquote>
+  <figcaption class="blockquote-footer">
+    в сети Binance Smart Chain (BSC)</cite>
+  </figcaption>
+</figure>
+
+
+
+
+<input type="hidden" value="0x503629000D3F94E4192316F1cA9Cc856d8Bea594" id="myInput">
+<button type="button" class="btn btn-warning" onclick="myFunction()">Копировать адрес</button>
+<br><br>
+<p>Спасибо :)</p>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+  <script>
+  function myFunction() {
+    var copyText = document.getElementById("myInput");
+    copyText.select();
+    document.execCommand("copy");
+	alert("Адрес скопирован: " + copyText.value);
+  }
+  </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

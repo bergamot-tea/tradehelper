@@ -8,21 +8,72 @@
 
 
 
-<div class="container col-xxl-8 px-4 py-5">
-
- <h4 class="pb-2 border-bottom"><img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="40" height="40">&nbsp&nbsp {{ token.name }} ({{ token.tiker }})</h4>
-
- <br>
-
-
-
+ <div class="container py-5">
+ 
+ <div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-md-auto">
+ <h4 class="pb-2"><img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="40" height="40">
+  &nbsp&nbsp {{ token.name }} ({{ token.tiker }})
+ </h4>
+    </div>
+    <div class="col text-center">
+  <h4 class="pb-2">{{ list_price.0 }} $ </h4>
+    </div>
+    <div class="col col-md-auto">
+ <h4 class="pb-2">
+  	<span class="badge {% if list_price.1  < 0 %}text-danger{% endif %}{% if list_price.1  >= 0 %}text-success{% endif %}">Ч: {{ list_price.1 }}%</span>
+	<span class="badge {% if list_price.2  < 0 %}text-danger{% endif %}{% if list_price.2  >= 0 %}text-success{% endif %}">Д: {{ list_price.2 }}%</span>
+	<span class="badge {% if list_price.3  < 0 %}text-danger{% endif %}{% if list_price.3  >= 0 %}text-success{% endif %}">Н: {{ list_price.3 }}%</span>
+ </h4>
+    </div>
   </div>
-  
-
-
+</div>
+ 
+ <!--
+ <h4 class="pb-2 border-bottom"><img align='center' class="" src="/static/img/{{ token.logo }}" alt="" width="40" height="40">
+ 
+ &nbsp&nbsp {{ token.name }} ({{ token.tiker }}) &nbsp&nbsp {{ list_price.0 }} $
+  	<span class="badge {% if list_price.1  < 0 %}text-danger{% endif %}{% if list_price.1  >= 0 %}text-success{% endif %}">Ч: {{ list_price.1 }}%</span>
+	<span class="badge {% if list_price.2  < 0 %}text-danger{% endif %}{% if list_price.2  >= 0 %}text-success{% endif %}">Д: {{ list_price.2 }}%</span>
+	<span class="badge {% if list_price.3  < 0 %}text-danger{% endif %}{% if list_price.3  >= 0 %}text-success{% endif %}">Н: {{ list_price.3 }}%</span>
+ </h4>
+ -->
 
  
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Цена<br>последние 7 дней</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Прогнозы на час<br>за последний день</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Прогнозы на день<br>за последнюю неделю</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#contact2-tab-pane" type="button" role="tab" aria-controls="contact2-tab-pane" aria-selected="false">Прогнозы на неделю<br>за последний месяц</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="tab1" tabindex="0">
+  <canvas id="myChart" width="400" height="200" role="img"></canvas>
+  </div>
+  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="tab2" tabindex="0">
+<canvas id="myChart2" width="400" height="200" role="img"></canvas>
+  </div>
+  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="tab3" tabindex="0">
+<canvas id="myChart3" width="400" height="200" role="img"></canvas>
+  </div>
+  <div class="tab-pane fade" id="contact2-tab-pane" role="tabpanel" aria-labelledby="tab4" tabindex="0">
+<canvas id="myChart4" width="400" height="200" role="img"></canvas>
+  </div>
+</div>
+</div>
+ <br>
 
+ 
+<!--
 <div class="container py-5">
 <h5 align="center">Цена последние 7 дней</h5>
   <canvas id="myChart" width="400" height="200" role="img"></canvas>
@@ -47,6 +98,8 @@
 <canvas id="myChart4" width="400" height="200" role="img"></canvas>
 </div>
  <br>
+ -->
+ 
 <!--
 {{ yyyy.0|safe }}
 {{ yyyy.1|safe }}
@@ -60,8 +113,6 @@
 {{ yyyy.6|safe }}
 {{ yyyy.7|safe }}
 -->
-
-
 
 
 

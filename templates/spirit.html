@@ -15,48 +15,40 @@
 <div class="container text-center">
   <div class="row">
     <div class="col">
-	
+	<h5 align="center">Прогнозы на час (%)</h5>
 <canvas id="doughnut-chart_1h" width="200" height="200"></canvas>
 
     </div>
     <div class="col">
+	<h5 align="center">Прогнозы на день (%)</h5>
 <canvas id="doughnut-chart_1d" width="200" height="200"></canvas>
     </div>
     <div class="col">
+	<h5 align="center">Прогнозы на неделю (%)</h5>
 <canvas id="doughnut-chart_7d" width="200" height="200"></canvas>
     </div>
   </div>
 </div>
-
-
-<canvas id="myChart" width="800" height="250"></canvas>
-
- 
-1H true: {{ percent_1h }} <br>
-1D true: {{ percent_1d }} <br>
-7D true: {{ percent_7d }} <br>
-Правельных 1H: {{ true_count_1h }}<br>
-Не Правельных 1H: {{ false_count_1h }}<br>
-Правельных 1D: {{ true_count_1d }}<br>
-Не Правельных 1D: {{ false_count_1d }}<br>
-Правельных 7D: {{ true_count_7d }}<br>
-Не Правельных 7D: {{ false_count_7d }}<br>
-
-
-{{ list2 }}
-
-
-<br>
-
-
-
-
   </div>
   
+  
+  
+<div class="container py-5">  
+  
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Последние прогнозы</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Правильность прогнозов каждого токена по периодам</button>
+  </li>
+</ul>
 
 
-<div class="container py-5">
-<h5 align='center'>Последние прогнозы</h5>
+
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="tab1" tabindex="0">
+
 <table class="table table-light table-striped">
   <thead>
     <tr>
@@ -85,18 +77,15 @@
 
 </table>
 
+  </div>
+  
+  
+  
+  
+  
+  
+  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="tab2" tabindex="0">
 
-</div>
-
-
-
-
-
-
-
-
-<div class="container py-5">
-<h5 align='center'>Правильность прогнозов каждого токена по периодам</h5>
 <table class="table table-light table-striped">
   <thead>
     <tr>
@@ -123,8 +112,15 @@
 	
   </tbody>
 </table>
+
+
+  </div>
+</div>
 </div>
 
+  
+  
+  
 
 
 
@@ -137,31 +133,6 @@
 {% block scripts %}
 
 
-<script>
-  new Chart(document.getElementById("myChart"), {
-    type: 'bar',
-    data: {
-      labels: ["Час", "День", "Неделя"],
-      datasets: [
-        {
-          label: "Правильные прогнозы",
-          backgroundColor: "#3cba9f",
-          data: [{{ true_count_1h }},{{ true_count_1d }},{{ true_count_7d }}]
-        }, {
-          label: "Ошибочные прогнозы",
-          backgroundColor: "#c45850",
-          data: [{{ false_count_1h }},{{ false_count_1d }},{{ false_count_7d }}]
-        }
-      ]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Population growth (millions)'
-      }
-    }
-});
-</script>
 
 <script>
 
@@ -172,8 +143,8 @@ new Chart(document.getElementById("doughnut-chart_1h"), {
       labels: ["Неправильные", "Правильные"],
       datasets: [
         {
-          label: "Population (millions)",
-          backgroundColor: ["#3cba9f", "#c45850"],
+          label: "",
+          backgroundColor: ["#c45850", "#3cba9f"],
           data: [temp1, {{ percent_1h|safe }}]
         }
       ]
@@ -181,7 +152,7 @@ new Chart(document.getElementById("doughnut-chart_1h"), {
     options: {
       title: {
         display: true,
-        text: 'Predicted world population (millions) in 2050'
+        text: ''
       }
     }
 });
@@ -197,8 +168,8 @@ new Chart(document.getElementById("doughnut-chart_1d"), {
       labels: ["Неправильные", "Правильные"],
       datasets: [
         {
-          label: "Population (millions)",
-          backgroundColor: ["#3cba9f", "#c45850"],
+          label: "",
+          backgroundColor: ["#c45850", "#3cba9f"],
           data: [temp2, {{ percent_1d|safe }}]
         }
       ]
@@ -206,7 +177,7 @@ new Chart(document.getElementById("doughnut-chart_1d"), {
     options: {
       title: {
         display: true,
-        text: 'Predicted world population (millions) in 2050'
+        text: ''
       }
     }
 });
@@ -222,8 +193,8 @@ new Chart(document.getElementById("doughnut-chart_7d"), {
       labels: ["Неправильные", "Правильные"],
       datasets: [
         {
-          label: "Population (millions)",
-          backgroundColor: ["#3cba9f", "#c45850"],
+          label: "",
+          backgroundColor: ["#c45850", "#3cba9f"],
           data: [temp3, {{ percent_7d|safe }}]
         }
       ]
@@ -231,7 +202,7 @@ new Chart(document.getElementById("doughnut-chart_7d"), {
     options: {
       title: {
         display: true,
-        text: 'Predicted world population (millions) in 2050'
+        text: ''
       }
     }
 });
