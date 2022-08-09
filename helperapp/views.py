@@ -354,7 +354,8 @@ def spirit_view(request, spirit):
             true_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             false_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             try:
-                percent_1h_token = true_count_1h_token / (true_count_1h_token + false_count_1h_token)
+                percent_1h_token = 100*true_count_1h_token / (true_count_1h_token + false_count_1h_token)
+                percent_1h_token = round(percent_1h_token,1)
             except:
                 percent_1h_token = 'Dontknow'  
             list2[j3].append(percent_1h_token)
@@ -362,7 +363,8 @@ def spirit_view(request, spirit):
             true_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             false_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             try:
-                percent_1d_token = true_count_1d_token / (true_count_1d_token + false_count_1d_token)
+                percent_1d_token = 100*true_count_1d_token / (true_count_1d_token + false_count_1d_token)
+                percent_1d_token = round(percent_1d_token,1)
             except:
                 percent_1d_token = 'Dontknow'  
             list2[j3].append(percent_1d_token)
@@ -370,7 +372,8 @@ def spirit_view(request, spirit):
             true_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             false_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = spirit).filter(pair = tokenpair).count()
             try:
-                percent_7d_token = true_count_7d_token / (true_count_7d_token + false_count_7d_token)
+                percent_7d_token = 100*true_count_7d_token / (true_count_7d_token + false_count_7d_token)
+                percent_7d_token = round(percent_7d_token,1)
             except:
                 percent_7d_token = 'Dontknow'        
             list2[j3].append(percent_7d_token)

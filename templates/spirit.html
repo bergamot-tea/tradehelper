@@ -9,7 +9,26 @@
 
 <div class="container col-xxl-8 px-4 py-5">
 
- <h5 align='center'>{{ spirit }}</h5><br><br>
+ <h5 align='center'>
+ {% if spirit  == 'fire' %}
+ Илон Маск
+{% endif %}
+ 
+ {% if spirit  == 'water' %}
+ Виталик Бутерин
+{% endif %}
+
+ {% if spirit  == 'earth' %}
+ Сатоши Накамото
+{% endif %}
+
+ {% if spirit  == 'air' %}
+ Чанпэн Джао
+{% endif %} 
+ 
+ 
+ 
+ </h5><br><br>
  
 
 <div class="container text-center">
@@ -49,13 +68,13 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="tab1" tabindex="0">
 
-<table class="table table-light table-striped">
+<table class="table table-light table-striped table-sm">
   <thead>
     <tr>
       <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
-      <th scope="col" align = center>Час</th>
-      <th scope="col" align = center>День</th>
-      <th scope="col" align = center>Неделя</th>
+      <th scope="col" class='text-center'>Час</th>
+      <th scope="col" class='text-center'>День</th>
+      <th scope="col" class='text-center'>Неделя</th>
     </tr>
   </thead>
    <tbody>
@@ -86,13 +105,13 @@
   
   <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="tab2" tabindex="0">
 
-<table class="table table-light table-striped">
+<table class="table table-light table-striped table-sm">
   <thead>
     <tr>
       <th scope="col">&nbsp&nbsp&nbsp&nbspCrypta</th>
-      <th scope="col" align = center>Час</th>
-      <th scope="col" align = center>День</th>
-      <th scope="col" align = center>Неделя</th>
+      <th scope="col" class='text-center'>Час</th>
+      <th scope="col" class='text-center'>День</th>
+      <th scope="col" class='text-center'>Неделя</th>
     </tr>
   </thead>
    <tbody>
@@ -102,9 +121,9 @@
 	
 		
 	<th scope="row"> <a href="/coins/{{ i.1 }}"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
-	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }}</td>
-	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }}</td>
-	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }}</td>
+	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }} %</td>
+	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }} %</td>
+	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }} %</td>
 
 
     </tr>
