@@ -68,7 +68,9 @@
   <div class="tab-pane fade" id="contact2-tab-pane" role="tabpanel" aria-labelledby="tab4" tabindex="0">
 <canvas id="myChart4" width="400" height="200" role="img"></canvas>
   </div>
+  <p align="center"><small>время Московское (UTC+3)</small></p>
 </div>
+
 </div>
  <br>
 
@@ -165,7 +167,7 @@ new Chart(document.getElementById("myChart2"), {
     labels: {{ xxxx_1h|safe }},
     datasets: [{ 
         data: {{ yyyy.0|safe }},
-        label: "Огонь",
+        label: "Илон Маск",
         borderColor: "#3e95cd",
         fill: false,
 		tension: 0.1,
@@ -179,7 +181,7 @@ new Chart(document.getElementById("myChart2"), {
       }, 
 	{ 
         data: {{ yyyy.2|safe }},
-        label: "Вода",
+        label: "Виталик Бутерин",
         //borderColor: "#8e5ea2",
         fill: false,
 		tension: 0.1,
@@ -196,7 +198,7 @@ new Chart(document.getElementById("myChart2"), {
       },
 		{ 
         data: {{ yyyy.4|safe }},
-        label: "Земля",
+        label: "Сатоши Накамото",
         borderColor: "#3cba9f",
         fill: false,
 		tension: 0.1,
@@ -209,7 +211,7 @@ new Chart(document.getElementById("myChart2"), {
       },
 	  { 
         data: {{ yyyy.6|safe }},
-        label: "Воздух",
+        label: "Чанпен Чжао",
         borderColor: "#c45850",
         fill: false,
 		tension: 0.1,
@@ -248,7 +250,7 @@ new Chart(document.getElementById("myChart3"), {
     labels: {{ xxxx_1d|safe }},
     datasets: [{ 
         data: {{ aaaa.0|safe }},
-        label: "Дневной прогноз духа огня",
+        label: "Илон Маск",
         borderColor: "#3e95cd",
         fill: false,
 		tension: 0.1,
@@ -262,7 +264,7 @@ new Chart(document.getElementById("myChart3"), {
       }, 
 	{ 
         data: {{ aaaa.2|safe }},
-        label: "Дневной прогноз духа воды",
+        label: "Виталик Бутерин",
         //borderColor: "#8e5ea2",
         fill: false,
 		tension: 0.1,
@@ -279,7 +281,7 @@ new Chart(document.getElementById("myChart3"), {
       },
 		{ 
         data: {{ aaaa.4|safe }},
-        label: "Дневной прогноз духа земля",
+        label: "Сатоши Накамото",
         borderColor: "#3cba9f",
         fill: false,
 		tension: 0.1,
@@ -292,7 +294,7 @@ new Chart(document.getElementById("myChart3"), {
       },
 	  { 
         data: {{ aaaa.6|safe }},
-        label: "Дневной прогноз духа воздух",
+        label: "Чанпен Чжао",
         borderColor: "#c45850",
         fill: false,
 		tension: 0.1,
@@ -329,7 +331,7 @@ new Chart(document.getElementById("myChart4"), {
     labels: {{ xxxx_7d|safe }},
     datasets: [{ 
         data: {{ bbbb.0|safe }},
-        label: "прогноз духа огня",
+        label: "Илон Маск",
         borderColor: "#3e95cd",
         fill: false,
 		tension: 0.1,
@@ -343,7 +345,7 @@ new Chart(document.getElementById("myChart4"), {
       }, 
 	{ 
         data: {{ bbbb.2|safe }},
-        label: "прогноз духа воды",
+        label: "Виталик Бутерин",
         //borderColor: "#8e5ea2",
         fill: false,
 		tension: 0.1,
@@ -360,7 +362,7 @@ new Chart(document.getElementById("myChart4"), {
       },
 		{ 
         data: {{ bbbb.4|safe }},
-        label: "прогноз духа земля",
+        label: "Сатоши Накамото",
         borderColor: "#3cba9f",
         fill: false,
 		tension: 0.1,
@@ -373,7 +375,7 @@ new Chart(document.getElementById("myChart4"), {
       },
 	  { 
         data: {{ bbbb.6|safe }},
-        label: "прогноз духа воздух",
+        label: "Чанпен Чжао",
         borderColor: "#c45850",
         fill: false,
 		tension: 0.1,

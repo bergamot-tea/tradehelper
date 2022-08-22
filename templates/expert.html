@@ -9,26 +9,59 @@
 
 <div class="container col-xxl-8 px-4 py-5">
 
- <h5 align='center'>
- {% if spirit  == 'fire' %}
- Илон Маск
+
+ {% if expert  == 'fire' %}
+ 
+   <h5 align='center'>
+ Илон Маск<br>
+ 
+  </h5>
+ <img src="/static/img/experts/ilon_foto.jpg" class="d-block mx-lg-auto img-fluid" alt="" width="200" loading="lazy">
+  <h5 align='center'>
+ <br>
+ самый богатый человек на этой планете
+  </h5>
 {% endif %}
  
- {% if spirit  == 'water' %}
- Виталик Бутерин
+ {% if expert  == 'water' %}
+   <h5 align='center'>
+ Виталик Бутерин<br>
+ 
+  </h5>
+ <img src="/static/img/experts/vitalik_foto.jpg" class="d-block mx-lg-auto img-fluid" alt="" width="200" loading="lazy">
+  <h5 align='center'>
+ <br>
+ придумал Ethereum, наш соотечественник
+  </h5>
 {% endif %}
 
- {% if spirit  == 'earth' %}
- Сатоши Накамото
+ {% if expert  == 'earth' %}
+   <h5 align='center'>
+ Сатоши Накамото<br>
+ 
+  </h5>
+ <img src="/static/img/experts/satoshi_foto.jpg" class="d-block mx-lg-auto img-fluid" alt="" width="200" loading="lazy">
+  <h5 align='center'>
+ <br>
+ придумал Bitcoin, отец криптовалют
+  </h5>
 {% endif %}
 
- {% if spirit  == 'air' %}
- Чанпэн Джао
+ {% if expert  == 'air' %}
+   <h5 align='center'>
+ Чанпэн Чжао<br>
+ 
+  </h5>
+ <img src="/static/img/experts/cz_foto.jpg" class="d-block mx-lg-auto img-fluid" alt="" width="200" loading="lazy">
+  <h5 align='center'>
+ <br>
+ основатель самой крупной криптовалютной биржи
+  </h5>
 {% endif %} 
  
  
  
- </h5><br><br>
+<br><br>
  
 
 <div class="container text-center">
@@ -121,9 +154,9 @@
 	
 		
 	<th scope="row"> <a href="/coins/{{ i.1 }}"><img class="" src="/static/img/{{ i.2 }}" alt="" width="32" height="32"></a>&nbsp&nbsp {{ i.0 }} ({{ i.1 }})</th>
-	<td align = center class="{% if i.3  <= 0.499 %}table-danger{% endif %}{% if i.3  >= 0.5 %}table-success{% endif %}">{{ i.3 }} %</td>
-	<td align = center class="{% if i.4  <= 0.499 %}table-danger{% endif %}{% if i.4  >= 0.5 %}table-success{% endif %}">{{ i.4 }} %</td>
-	<td align = center class="{% if i.5  <= 0.499 %}table-danger{% endif %}{% if i.5  >= 0.5 %}table-success{% endif %}">{{ i.5 }} %</td>
+	<td align = center class="{% if i.3  <= 49.9 %}table-danger{% endif %}{% if i.3  >= 50 %}table-success{% endif %}">{{ i.3 }} %</td>
+	<td align = center class="{% if i.4  <= 49.9 %}table-danger{% endif %}{% if i.4  >= 50 %}table-success{% endif %}">{{ i.4 }} %</td>
+	<td align = center class="{% if i.5  <= 49.9 %}table-danger{% endif %}{% if i.5  >= 50 %}table-success{% endif %}">{{ i.5 }} %</td>
 
 
     </tr>
