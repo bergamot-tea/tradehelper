@@ -316,8 +316,7 @@ def expert_view(request, expert):
    
     expert_list = ['fire','water', 'earth', 'air']
     if expert in expert_list:
-
-    
+        
         tokens = Coins.objects.all()
         
         #таблица с прогнозами по каждой монете за каждый период
@@ -341,25 +340,29 @@ def expert_view(request, expert):
                 list1[j2].append(predict)   #добавляем значение predict в конец списка
             j2 = j2 + 1   
 
-
+        
+        timenow = datetime.now()
+        time_7d_early = timenow - timedelta(days = 7)
+        time_1d_early = timenow - timedelta(days = 1)
+        time_30d_early = timenow - timedelta(days = 30)
 
         #для графика с процентом правильности прогнозов по периодам
-        true_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = expert).count()
-        false_count_1h = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = expert).count()
+        true_count_1h = Predict_grow.objects.filter(time__gte = time_1d_early).filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = expert).count()
+        false_count_1h = Predict_grow.objects.filter(time__gte = time_1d_early).filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = expert).count()
         try:
             percent_1h = true_count_1h / (true_count_1h + false_count_1h)
         except:
             percent_1h = 'Dontknow'  
         
-        true_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = expert).count()
-        false_count_1d = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = expert).count()
+        true_count_1d = Predict_grow.objects.filter(time__gte = time_7d_early).filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = expert).count()
+        false_count_1d = Predict_grow.objects.filter(time__gte = time_7d_early).filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = expert).count()
         try:
             percent_1d = true_count_1d / (true_count_1d + false_count_1d)
         except:
             percent_1d = 'Dontknow'  
             
-        true_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = expert).count()
-        false_count_7d = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = expert).count()
+        true_count_7d = Predict_grow.objects.filter(time__gte = time_30d_early).filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = expert).count()
+        false_count_7d = Predict_grow.objects.filter(time__gte = time_30d_early).filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = expert).count()
         try:
             percent_7d = true_count_7d / (true_count_7d + false_count_7d)
         except:
@@ -376,8 +379,8 @@ def expert_view(request, expert):
             list2[j3] = [i.name, i.tiker, i.logo]
             tokenpair = i.pair            
             
-            true_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
-            false_count_1h_token = Predict_grow.objects.filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            true_count_1h_token = Predict_grow.objects.filter(time__gte = time_1d_early).filter(period = '1h').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            false_count_1h_token = Predict_grow.objects.filter(time__gte = time_1d_early).filter(period = '1h').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
             try:
                 percent_1h_token = 100*true_count_1h_token / (true_count_1h_token + false_count_1h_token)
                 percent_1h_token = round(percent_1h_token,1)
@@ -385,8 +388,8 @@ def expert_view(request, expert):
                 percent_1h_token = 'Dontknow'  
             list2[j3].append(percent_1h_token)
             
-            true_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
-            false_count_1d_token = Predict_grow.objects.filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            true_count_1d_token = Predict_grow.objects.filter(time__gte = time_7d_early).filter(period = '1d').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            false_count_1d_token = Predict_grow.objects.filter(time__gte = time_7d_early).filter(period = '1d').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
             try:
                 percent_1d_token = 100*true_count_1d_token / (true_count_1d_token + false_count_1d_token)
                 percent_1d_token = round(percent_1d_token,1)
@@ -394,8 +397,8 @@ def expert_view(request, expert):
                 percent_1d_token = 'Dontknow'  
             list2[j3].append(percent_1d_token)
             
-            true_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
-            false_count_7d_token = Predict_grow.objects.filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            true_count_7d_token = Predict_grow.objects.filter(time__gte = time_30d_early).filter(period = '7d').filter(trueorfalse = True).filter(nn__icontains = expert).filter(pair = tokenpair).count()
+            false_count_7d_token = Predict_grow.objects.filter(time__gte = time_30d_early).filter(period = '7d').filter(trueorfalse = False).filter(nn__icontains = expert).filter(pair = tokenpair).count()
             try:
                 percent_7d_token = 100*true_count_7d_token / (true_count_7d_token + false_count_7d_token)
                 percent_7d_token = round(percent_7d_token,1)

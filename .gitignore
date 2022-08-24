@@ -1,5 +1,6 @@
 data/*
 media/*
+static/img/comics/*
 secret.py
 *.h5
 *.json
