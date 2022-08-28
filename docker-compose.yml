@@ -9,7 +9,7 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    restart: always
+    restart: on-failure
   
   flask:
     build: ./flask
@@ -24,7 +24,7 @@ services:
       - .:/app
     ports:
       - "5000:5000"
-    restart: always
+    restart: on-failure
     
   web:
     build: .
@@ -40,5 +40,5 @@ services:
       - "8050:8050"
     depends_on:
       - db
-    restart: always
+    restart: on-failure
 
