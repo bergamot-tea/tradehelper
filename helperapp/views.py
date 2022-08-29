@@ -72,7 +72,7 @@ def allcoins_view(request):
         try:
             price = Predict_grow.objects.filter(**my_filter).last().price
         except:
-            price = None
+            price = 0 #если сделать None а не 0 то при добавлении новых токенов в базу страница всех криптовалют не будет открываться 
         list1[j2].append(price)   #добавляем значение predict в конец списка
         
         list_delta_price = check_delta_price(tokenpair)
