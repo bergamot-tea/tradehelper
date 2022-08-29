@@ -20,7 +20,7 @@ from helperapp.views import predict_1h_view, predict_1d_view, predict_7d_view, r
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
